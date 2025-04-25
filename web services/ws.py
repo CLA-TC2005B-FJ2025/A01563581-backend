@@ -112,16 +112,17 @@ def create_personaje():
     id = data.get('id')
     name = data.get('name')
     email = data.get('email')
+    whatsapp = data.get('whatsapp')
 
     if not id or not name or not email:
-        return jsonify({'error': 'Se requiere id, nombre y correo electrónico'}), 400
+        return jsonify({'error': 'Se requiere id, nombre, correo electrónico y whatsapp'}), 400
 
     conn = get_db_connection()
     if conn:
         try:
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO personajes (id, name, email) VALUES (%d, %s, %s)", (id, name, email))
+                "INSERT INTO personajes (id, name, email, whatsapp) VALUES (%d, %s, %s, %s)", (id, name, email, whatsapp))
             conn.commit()
             return jsonify({'mensaje': 'Personaje creado exitosamente'}), 201
         except Exception as e:
@@ -140,6 +141,7 @@ def update_personaje(id):
     data = request.get_json()
     name = data.get('name')
     email = data.get('email')
+    whatsapp = data.get('whatsapp')
 
     if not name or not email:
         return jsonify({'error': 'Se requiere nombre y correo electrónico'}), 400
@@ -149,7 +151,7 @@ def update_personaje(id):
         try:
             cursor = conn.cursor()
             cursor.execute(
-                "UPDATE personajes SET name = %s, email = %s WHERE id = %d", (name, email, id))
+                "UPDATE personajes SET name = %s, email = %s, whatsapp = %s WHERE id = %d", (name, email,whatsapp, id))
             conn.commit()
             if cursor.rowcount > 0:
                 return jsonify({'mensaje': 'Personaje actualizado exitosamente'}), 200
